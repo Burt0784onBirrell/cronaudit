@@ -74,6 +74,16 @@ func (e *CronEntry) IsShorthand() bool {
 	return strings.HasPrefix(e.Minute, "@")
 }
 
+// Schedule returns the schedule portion of the entry as a string.
+// For shorthand entries, it returns the @keyword. For standard entries,
+// it returns the five time fields joined by spaces.
+func (e *CronEntry) Schedule() string {
+	if e.IsShorthand() {
+		return e.Minute
+	}
+	return strings.Join([]string{e.Minute, e.Hour, e.Dom, e.Month, e.Dow}, " ")
+}
+
 // String returns a human-readable representation of the entry.
 func (e *CronEntry) String() string {
 	return fmt.Sprintf("%s:%d: %s", e.Host, e.Line, e.Raw)
